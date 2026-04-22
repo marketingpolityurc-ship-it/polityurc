@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Archives · Polity 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0d0d0d; --paper: #f7f2ea; --cream: #eee7d3;
+      --gold: #a67c3a; --gold-light: #c49a52; --red: #9b2335;
+      --teal: #5c1a1a; --teal-light: #7a2525;
+      --rose: #c4566a; --saffron: #e07b39;
+      --muted: #6b6355; --border: #c8bfa8;
+    }
+    body { background: var(--paper); color: var(--ink); font-family: 'Cormorant Garamond', serif; font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* GLOBAL NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 3rem; height: 58px;
+      border-bottom: 1px solid rgba(200,191,168,0.2);
+      background: rgba(92,26,26,0.97);
+      backdrop-filter: blur(8px);
+    }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; font-style: italic; color: #f7f2ea; text-decoration: none; letter-spacing: 0.01em; }
+    .nav-links { display: flex; gap: 0; list-style: none; height: 100%; align-items: center; }
+    .nav-item { position: relative; height: 100%; display: flex; align-items: center; }
+    .nav-item > a { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(247,242,234,0.8); text-decoration: none; padding: 0 1.1rem; height: 100%; display: flex; align-items: center; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+    .nav-item > a:hover { color: #c49a52; background: rgba(255,255,255,0.05); }
+    .nav-item .caret { margin-left: 0.35rem; font-size: 0.5rem; opacity: 0.6; }
+    .nav-dropdown { position: absolute; top: 100%; left: 0; min-width: 200px; background: #3a1010; border-top: 2px solid #c49a52; box-shadow: 0 12px 30px rgba(0,0,0,0.3); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.2s, transform 0.2s, visibility 0.2s; z-index: 200; }
+    .nav-item:hover .nav-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-dropdown a { display: block; padding: 0.75rem 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(247,242,234,0.75); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.15s, color 0.15s; }
+    .nav-dropdown a:last-child { border-bottom: none; }
+    .nav-dropdown a:hover { background: rgba(255,255,255,0.07); color: #c49a52; }
+
+    /* PAGE HEADER */
+    .page-header { padding: 5rem 5rem 4rem; border-bottom: 1px solid var(--border); }
+    .page-tag { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 1rem; }
+    .page-tag::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--gold); }
+    h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; margin-bottom: 1rem; }
+    h1 em { font-style: italic; color: var(--red); }
+    .page-intro { font-size: 1.15rem; color: var(--muted); line-height: 1.7; max-width: 60ch; }
+
+    /* JOURNAL SECTION */
+    main { flex: 1; padding: 4rem 5rem 5rem; }
+
+    .journal-announce {
+      max-width: 820px;
+      margin: 0 auto 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .journal-announce .announce-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .journal-announce .announce-tag::before {
+      content: '✦';
+      font-size: 0.6rem;
+    }
+    .journal-announce h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 900;
+      line-height: 1.1;
+    }
+    .journal-announce h2 em {
+      font-style: italic;
+      color: var(--red);
+    }
+    .journal-announce p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 62ch;
+    }
+
+    .journal-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: var(--teal);
+      color: #f7f2ea;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--teal);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .btn-download:hover {
+      background: var(--red);
+      border-color: var(--red);
+    }
+    .btn-download svg {
+      width: 13px; height: 13px; fill: currentColor; flex-shrink: 0;
+    }
+
+    /* PDF VIEWER */
+    .pdf-wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+      background: #fff;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .pdf-toolbar {
+      background: var(--teal);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(196,154,82,0.4);
+    }
+    .pdf-toolbar-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(247,242,234,0.75);
+    }
+    .pdf-toolbar-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+    }
+    .pdf-embed {
+      width: 100%;
+      height: 820px;
+      display: block;
+      border: none;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #3a1010;
+      border-top: 2px solid #c49a52;
+      padding: 2.5rem 4rem;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 2rem; flex-wrap: wrap;
+    }
+    .footer-brand { font-family: 'Playfair Display', serif; font-size: 1rem; font-style: italic; color: rgba(247,242,234,0.55); }
+    .footer-social { display: flex; gap: 1rem; align-items: center; }
+    .footer-social a {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(196,154,82,0.35); border-radius: 50%;
+      color: rgba(247,242,234,0.6); text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .footer-social a:hover { border-color: #c49a52; color: #c49a52; background: rgba(196,154,82,0.08); }
+    .footer-social svg { width: 15px; height: 15px; fill: currentColor; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) { nav { padding: 0 1.5rem; } .nav-item > a { padding: 0 0.7rem; font-size: 0.55rem; } }
+    @media (max-width: 700px) { footer { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; } }
+    @media (max-width: 600px) {
+      .page-header { padding: 3rem 1.5rem; }
+      main { padding: 2.5rem 1.5rem 3rem; }
+      .pdf-embed { height: 520px; }
+    }
+    @media (max-width: 480px) {
+      nav { padding: 0 1rem; }
+      .nav-item > a { padding: 0 0.5rem; font-size: 0.5rem; letter-spacing: 0.08em; }
+      .page-header { padding: 3rem 1.25rem 2.5rem !important; }
+      h1 { font-size: clamp(1.8rem, 8vw, 3rem) !important; }
+      .page-intro { font-size: 1rem !important; }
+      main { padding: 2rem 1.25rem !important; }
+      footer { flex-direction: column; align-items: center; text-align: center; padding: 2rem 1.25rem; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;"><img src="logo-nav.png" alt="Polity URC" style="height:36px;width:auto;"><span class="nav-logo">Polity:URC</span></a>
+    <ul class="nav-links">
+      <li class="nav-item">
+        <a href="about-hub.html">About <span class="caret">▾</span></a>
+        <div class="nav-dropdown">
+          <a href="about.html">About Polity</a>
+          <a href="team.html">Our Team</a>
+          <a href="partners.html">Our Partners & Sponsors</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="schedule-hub.html">Polity 2026 <span class="caret">▾</span></a>
+        <div class="nav-dropdown">
+          <a href="schedule.html">Full Schedule 2026</a>
+          <a href="student-panels.html">Student Panels</a>
+          <a href="professor-roundtables.html">Professor Roundtables</a>
+          <a href="workshops.html">Workshops</a>
+          <a href="networking.html">Networking Events</a>
+        </div>
+      </li>
+      <li class="nav-item"><a href="archives.html">Archives</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-tag">Polity 2026 · Research Archive</div>
+    <h1>Student <em>Archives</em></h1>
+    <p class="page-intro">A permanent record of undergraduate research presented at Polity. Explore abstracts and presenter profiles from our inaugural 2026 conference below.</p>
+  </div>
+
+  <main>
+
+    <div class="journal-announce">
+      <div class="announce-tag">Now Available · 2026 Journal</div>
+      <h2>The Polity: URC 2026 <em>Abstract Journal</em> is here!</h2>
+      <p>
+        Our inaugural journal is now available to read online. Explore the full collection of student presenter abstracts from this year's conference — a showcase of exceptional undergraduate political science research from McGill and beyond.
+      </p>
+      <div class="journal-actions">
+        <a class="btn-download" href="Polity_URC_Abstract_Journal_2026.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>
+          Download PDF
+        </a>
+      </div>
+    </div>
+
+    <div class="pdf-wrapper">
+      <div class="pdf-toolbar">
+        <span class="pdf-toolbar-title">Polity: URC — Abstract Journal 2026</span>
+        <span class="pdf-toolbar-label">Scroll to explore ↓</span>
+      </div>
+      <iframe
+        class="pdf-embed"
+        src="Polity_URC_Abstract_Journal_2026.pdf"
+        title="Polity URC 2026 Abstract Journal"
+        aria-label="Embedded PDF: Polity URC 2026 Abstract Journal"
+      ></iframe>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-brand">Polity: Undergraduate Research Conference · 2026</div>
+    <div class="footer-social">
+      <a href="https://instagram.com/polityurc" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      <a href="https://linkedin.com/company/polity-undergraduate-research-conference" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      <a href="mailto:polityurc@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+    </div>
+  </footer>
+
+</body>
+</html>
